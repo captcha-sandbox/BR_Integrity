@@ -36,12 +36,12 @@
 			$stmt = $conn->prepare("SELECT cond_id FROM `condition` WHERE rule_name = '$rulename'");
 			$stmt->execute();
 
-			$result = $stmt->fetchAll();
-			
-			for($i=0; $i<$stmt->rowCount(); $i++) {
+			$i = 0;
+			while ($result = $stmt->fetch()) {
 				$cond1 = new Condition();
-				$this->conditions[$i] = $cond1->getCondition($rulename, $result[$i]['cond_id']);
+				$this->conditions[$i] = $cond1->getCondition($rulename, $result['cond_id']);
 				unset($cond1);
+				$i++;
 			}
 
 			//$temp[0] = $cond1->getCondition($rulename, $result[0]['cond_id']);
@@ -68,11 +68,13 @@
 			$stmt = $conn->prepare("SELECT * FROM business_rule WHERE rule_name = '$rulename'");
 			$stmt->execute();
 
-			$result = $stmt->fetchAll();
-			$this->target = $result[0]['target'];
-			$this->source = $result[0]['source'];
-			$this->description = $result[0]['description'];
-
+			//$result = $stmt->fetchAll();
+			while ($result = $stmt->fetch()) {
+				$this->target = $result['target'];
+				$this->source = $result['source'];
+				$this->description = $result['description'];
+			}
+			
 			$conn = null;
 		}
 
@@ -122,12 +124,20 @@
 			$stmt = $conn->prepare("SELECT param_id FROM `condition_param` WHERE cond_id = $cond_id");
 			$stmt->execute();
 
-			$result = $stmt->fetchAll();
+			/*$result = $stmt->fetchAll();
 			
 			for($i=0; $i<$stmt->rowCount(); $i++) {
 				$param = new Parameter();
 				$this->parameters[$i] = $param->getParameter($cond_id, $result[$i]['param_id']);
 				unset($param);
+			}*/
+
+			$i=0;
+			while ($result = $stmt->fetch()) {
+				$param = new Parameter();
+				$this->parameters[$i] = $param->getParameter($cond_id, $result['param_id']);
+				unset($param);
+				$i++;
 			}
 
 			//$temp[0] = $cond1->getCondition($rulename, $result[0]['cond_id']);
@@ -151,11 +161,13 @@
 			$stmt = $conn->prepare("SELECT * FROM `condition` WHERE rule_name = '$rulename' AND cond_id = $id");
 			$stmt->execute();
 
-			$result = $stmt->fetchAll();
-			$this->cond_id = $result[0]['cond_id'];
-			$this->source = $result[0]['source'];
-			$this->conj_type = $result[0]['conj_type'];
-			$this->ordered = $result[0]['ordered'];
+			//$result = $stmt->fetchAll();
+			while($result = $stmt->fetch()) {
+				$this->cond_id = $result['cond_id'];
+				$this->source = $result['source'];
+				$this->conj_type = $result['conj_type'];
+				$this->ordered = $result['ordered'];
+			}
 			//echo $this->cond_id;
 			//$this->parameters = $this->getParameter($this->cond_id);
 
@@ -209,13 +221,14 @@
 			$stmt = $conn->prepare("SELECT * FROM `condition_param` WHERE cond_id = '$cond_id' AND param_id = $id");
 			$stmt->execute();
 
-			$result = $stmt->fetchAll();
-			$this->param_id = $result[0]['param_id'];
-			$this->cond_id = $result[0]['cond_id'];
-			$this->param_value = $result[0]['param_value'];
-			$this->conj_type = $result[0]['conj_type'];
-			$this->ordered = $result[0]['ordered'];
-
+			//$result = $stmt->fetchAll();
+			while($result = $stmt->fetch()) {
+				$this->param_id = $result['param_id'];
+				$this->cond_id = $result['cond_id'];
+				$this->param_value = $result['param_value'];
+				$this->conj_type = $result['conj_type'];
+				$this->ordered = $result['ordered'];
+			}
 			$conn = null;
 			return $this;
 		}
@@ -256,11 +269,13 @@
 			$stmt = $conn->prepare("SELECT * FROM `table` WHERE name = '$tablename'");
 			$stmt->execute();
 
-			$result = $stmt->fetchAll();
-			$this->name = $result[0]['name'];
-			$this->alias = $result[0]['alias'];
-			$this->description = $result[0]['description'];
-			$this->attributes = $this->getAttributes($result[0]['name']);
+			//$result = $stmt->fetchAll();
+			while($result = $stmt->fetch()) {
+				$this->name = $result['name'];
+				$this->alias = $result['alias'];
+				$this->description = $result['description'];
+				$this->attributes = $this->getAttributes($result['name']);	
+			}
 
 			$conn = null;
 			return $this;
@@ -279,11 +294,17 @@
 			$stmt->execute();
 
 			$temp = array();
-			$result = $stmt->fetchAll();
+			//$result = $stmt->fetchAll();
 			
+			$i = 0;
+			while ($result = $stmt->fetch()) {
+				$temp[$i] = $result['attribute'];
+				$i++;	
+			}
+			/*
 			for($i=0; $i<$stmt->rowCount(); $i++) {
 				$temp[$i] = $result[$i]['attribute'];
-			}
+			}*/
 
 			$conn = null;
 			return $temp;

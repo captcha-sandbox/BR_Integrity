@@ -108,7 +108,7 @@
 	} 
 	$params = $params.")";
 
-	//echo $params;
+	echo $params."\n";
 	$table = new Table();
 	$param_source = $table->getTable($first->getSource());
 	unset($table);
@@ -142,7 +142,7 @@
 				  $cond_source->getAlias()." WHERE ".$where.")";
 		unset($cond_source);
 	}
-	echo $values."\n";
+	//echo $values."\n";
 
 	//End of other condition
 
@@ -156,10 +156,14 @@
 	$stmt = $conn->prepare($query);
 	$stmt->execute();
 
-	$result = $stmt->fetchAll();
+	/*$result = $stmt->fetchAll();
 	for($i=0; $i<$stmt->rowCount(); $i++) {
 		echo($result[$i][$br->getTarget()])." ";
 		print("\n");
-	} 
+	} */
+	while ($result = $stmt->fetch()) {
+		echo($result[$br->getTarget()])." ";
+		print("\n");	
+	}
 ?>
 
