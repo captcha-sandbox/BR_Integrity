@@ -1,17 +1,26 @@
   $(document).ready(function(){
 
+  //document.getElementById("source").id = "source2";  
   var i = $('input').size() + 1;
-
+/*
   $('#add').click(function() {
-  $('<div class="form-group"><label class="control-label col-sm-2" for="conjunction">Parameter</label><div class="col-sm-10"><input type="text" name="dynamic[]" class="form-control"/></div><br></div><div class="form-group"><label class="control-label col-sm-2" for="conjunction"></label><div class="col-sm-10"><select class="form-control" id="conjunction" name="conjunction"><option>AND</option><option>OR</option><option></option></select></div><br></div>').fadeIn('slow').appendTo('.inputs');
+  $(response).fadeIn('slow').appendTo('.inputs');
+  alert(response);
   i++;
+  });
+*/
+  $('#add').click(function() {
+    var last = $('.input:last').find('select').attr('id');
+    var index = parseInt(last.substring(6));
+    //alert(last);
+    $.get("http://localhost/sandbox/add_form.php", {order : index}, function (data){
+        $('.inputs').append(data);
+        // $(data).fadeIn('slow').appendTo('.inputs');
+    });
   });
 
   $('#remove').click(function() {
-  if(i > 1) {
-  $('.form-group:last').remove();
-  i--;
-  }
+    $('.input:last').remove();
   });
 
   $('#reset').click(function() {
@@ -22,7 +31,7 @@
   });
 
   // here's our click function for when the forms submitted
-
+  /*
   $('.submit').click(function(){
 
   var answers = [];
@@ -50,8 +59,8 @@
      
    });
 */
-  return false;
+  /*return false; 
 
-  });
+  }); */
 
   });

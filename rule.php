@@ -39,7 +39,7 @@
         while($baris = $stmt->fetch()) {
       ?>
       <tr>
-        <td><?php echo $baris['source']; ?></td>
+        <td><a href="condition.php?cond=<?php echo $baris['cond_id']; ?>"><?php echo $baris['source']; ?></a></td>
         <td><?php echo $baris['conj_type']; ?></td>
         <td><?php echo $baris['ordered']; ?></td>
       </tr>

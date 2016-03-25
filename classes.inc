@@ -187,6 +187,8 @@
 		var $param_value;
 		var $conj_type;
 		var $ordered;
+		var $group;
+		var $member;
 
 		function getParamId() {
 			return $this->param_id;
@@ -204,8 +206,16 @@
 			return $this->conj_type;
 		}
 
-		function isOrdered() {
+		function getOrder() {
 			return $this->ordered;
+		}
+
+		function getGroup() {
+			return $this->group;
+		}
+
+		function getMember() {
+			return $this->member;
 		}
 
 		function getParameter($cond_id, $id) {
@@ -228,6 +238,8 @@
 				$this->param_value = $result['param_value'];
 				$this->conj_type = $result['conj_type'];
 				$this->ordered = $result['ordered'];
+				$this->group = $result['group'];
+				$this->member = $result['member'];
 			}
 			$conn = null;
 			return $this;

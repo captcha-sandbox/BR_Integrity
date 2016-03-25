@@ -20,6 +20,22 @@
 			echo ("Mahasiswa ".$nim." tidak boleh mengambil lebih dari 22 SKS");
 		}
 	}
+
+	function sortGroup($params) {
+		//print_r($params);
+		for($i=1; $i<sizeof($params); $i++) {
+			$key = $params[$i];
+			$j = $i-1;
+			while (($j>=0) && ((($key->getGroup() < $params[$j]->getGroup()) || (($key->getGroup() <= $params[$j]->getGroup()) && ($key->getOrder() < $params[$j]->getOrder()))))) {
+				$params[$j+1] = $params[$j];
+				$j--;
+			}
+			$params[$j+1] = $key;
+			//print_r($params);
+		}
+		return $params;
+
+	}
 	/*
 	try {
 		$conn = new PDO("mysql:host=$servername;dbname=praktikum", $username, $password);
@@ -99,16 +115,18 @@
 	$temp = $first->showParameters();
 
 	for($i=0; $i<sizeof($temp); $i++) {
+		/*
 		if($temp[$i]->isOrdered()) {
 			$params = $params.$temp[$i]->getParamValue()." ";
 		}
 		else {
 			$params = $params." ".$temp[$i]->getConjType()." ".$temp[$i]->getParamValue()." ";	
-		}
+		}*/
+		$params = $params." ".$temp[$i]->getParamValue()." ".$temp[$i]->getConjType()." ";
 	} 
 	$params = $params.")";
 
-	echo $params."\n";
+	//echo $params."\n";
 	$table = new Table();
 	$param_source = $table->getTable($first->getSource());
 	unset($table);
@@ -125,19 +143,54 @@
 
 	$values = "";
 	$table = new Table();
+	$sort = array();
+	
 	for($j=0; $j<sizeof($other); $j++) {
 		$temp2[$j] = $other[$j]->showParameters();
 		$cond_source = $table->getTable($other[$j]->getSource());
 		//echo $temp2[$j][0]->getParamValue()."\n";
 		$where = "";
+		$idx = 0;
+	
 		for($k=0; $k<sizeof($temp2[$j]); $k++) {
+			//tes sorting
+			
+			$sort[$idx] = $temp2[$j][$k];
+			$idx++;
+			//echo $idx."\n";
+		
+			// end of test
+			/*
 			if($temp2[$j][$k]->isOrdered()) {
 				$where = $where.$temp2[$j][$k]->getParamValue()." ";
 			}
 			else {
 				$where = $where." ".$temp2[$j][$k]->getConjType()." ".$temp2[$j][$k]->getParamValue()." ";	
-			}
+			}*/
+			
+				//$where = $where." ".$temp2[$j][$k]->getParamValue()." ".$temp2[$j][$k]->getConjType()." ";
 		}
+
+		$sorted_param = sortGroup($sort);
+		for($x=0; $x<sizeof($sorted_param); $x++) {
+			if($sorted_param[$x]->getMember() > 1) {
+				$member = $sorted_param[$x]->getMember();
+				$current = $sorted_param[$x]->getOrder();
+				if($current == 1) {
+					$where = $where."(".$sorted_param[$x]->getParamValue()." ".$sorted_param[$x]->getConjType()." ";
+				}
+				elseif($member == $current) {
+					$where = $where." ".$sorted_param[$x]->getParamValue().")".$sorted_param[$x]->getConjType()." ";
+				}
+				else {
+					$where = $where." ".$sorted_param[$x]->getParamValue()." ".$sorted_param[$x]->getConjType()." ";
+				}
+			}
+			else {
+				$where = $where." ".$sorted_param[$x]->getParamValue()." ".$sorted_param[$x]->getConjType()." ";
+			}	
+		}
+		
 		$values = $values.$other[$j]->getConjType()." NOT EXISTS (SELECT NULL FROM ".$cond_source->getName()." ".
 				  $cond_source->getAlias()." WHERE ".$where.")";
 		unset($cond_source);
@@ -156,14 +209,22 @@
 	$stmt = $conn->prepare($query);
 	$stmt->execute();
 
-	/*$result = $stmt->fetchAll();
+	$result = $stmt->fetchAll();
 	for($i=0; $i<$stmt->rowCount(); $i++) {
 		echo($result[$i][$br->getTarget()])." ";
 		print("\n");
-	} */
+	} 
+
+	
 	while ($result = $stmt->fetch()) {
 		echo($result[$br->getTarget()])." ";
 		print("\n");	
 	}
+	/*
+	$res = sortGroup($sort);
+	//print_r($res);
+	foreach ($res as $elmt) {
+		echo $elmt->getParamValue()."\n";
+	}*/
 ?>
 

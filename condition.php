@@ -14,23 +14,24 @@
 </head>
 
 <?php 
-    require ('sql_connect.inc');
+  require ('sql_connect.inc');
     //sql_connect('blog');
-	$stmt = $conn->prepare("SELECT rule_name, target, source, description FROM business_rule");
+  $id = $_GET['cond'];
+	$stmt = $conn->prepare("SELECT * FROM `condition_param` WHERE cond_id = $id");
   $stmt->execute();
 
 ?>
 
 <body class="default">
 <div class="wrapper">
-<h3>Business Rules</h3> <br>
+<!--<h3><?php echo $rulename; ?></h3> <br> -->
+<h4>Condition</h4><br>
 <table class="table table-hover">
     <thead>
       <tr>
-        <th>Rule Name</th>
-        <th>Target</th>
         <th>Source</th>
-         <th>Description</th>
+        <th>Conjunction</th>
+        <th>Ordered</th>
       </tr>
     </thead>
     <tbody>
@@ -38,10 +39,9 @@
         while($baris = $stmt->fetch()) {
       ?>
       <tr>
-        <td><a href="rule.php?rule=<?php echo $baris['rule_name']; ?>"><?php echo $baris['rule_name']; ?></a></td>
-        <td><?php echo $baris['target']; ?></td>
-        <td><?php echo $baris['source']; ?></td>
-        <td><?php echo $baris['description']; ?></td>
+        <td><?php echo $baris['param_value']; ?></td>
+        <td><?php echo $baris['conj_type']; ?></td>
+        <td><?php echo $baris['ordered']; ?></td>
       </tr>
       <?php
         }
@@ -50,7 +50,7 @@
     </tbody>
   </table>
 
-  <a href="add_rule.php">Add Rule</a>
+  <a href="add_param.php?cond=<?php echo $id; ?>">Add Parameter</a>
 </div>
 
 <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
