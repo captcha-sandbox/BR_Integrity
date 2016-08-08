@@ -1,0 +1,7 @@
+June 7, 2016, 6:39 am
+Instance checking for business rule BS2A
+
+Instance 13512005 3 violated business rule 
+
+Instance 13512022 3 violated business rule 
+
