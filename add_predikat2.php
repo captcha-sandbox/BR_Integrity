@@ -12,50 +12,36 @@
 <title>Business Rule</title>
 </head>
 
-<?php 
-  require ('sql_connect.inc');
-  $rulename = $_GET['rule'];
-  //sql_connect('blog');
-	$stmt = $conn->prepare("SELECT `name` FROM `table`");
-  $stmt->execute();
-
-?>
-
 <body class="default">
 <div class="wrapper">
 
- <form class="form-horizontal" role="form" method="post" action="<?php echo 'insert_condition.php?rule='.$rulename ?>">
+ <form class="form-horizontal" role="form" method="post" action="<?php echo 'insert_predikat.php?' ?>">
   <div class="form-group">
-    <label class="control-label col-sm-2" for="conjunction"></label>
-      <div class="col-sm-10">
-        <select class="form-control" id="conjunction" name="conjunction">  
-          <option>AND</option>
-          <option>OR</option>
-          <option></option>  
-        </select>
-      </div>
-    <br>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="source">Source</label>
-      <div class="col-sm-10">
-        <select class="form-control" id="source" name="source">
-          <?php
-            while ($result = $stmt->fetch()) {
-          ?>    
-          <option><?php echo $result['name']; ?></option>
-          <?php
-            }
-            $conn = null;
-          ?>
-        </select>
-      </div>
-    <br>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="ordered">Ordered</label>
+    <label class="control-label col-sm-2" for="predikat">Nama predikat</label>
     <div class="col-sm-10">
-      <input type="checkbox" id="ordered" name="ordered" value="1">
+      <input type="text" class="form-control" id="predikat" name="predikat">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="argumen">Jumlah argumen</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="argumen" name="argumen">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="tipe">Tipe predikat</label>
+      <div class="col-sm-10">
+        <select class="form-control" id="tipe" name="tipe">  
+          <option>EDB</option>
+          <option>IDB</option>
+        </select>
+      </div>
+    <br>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="description">Deskripsi</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="description" name="description">
     </div>
   </div>
   <div class="form-group">

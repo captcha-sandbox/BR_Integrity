@@ -27,9 +27,13 @@
 </head>
 <?php 
   require ('sql_connect.inc');
+    //sql_connect('blog');
+    $data = $conn->prepare("SELECT id_ref, nama_predikat, db_name, table_name FROM `reference` ref INNER JOIN predikat p ON ref.predikat = p.id_predikat");
+    $data->execute();
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
-  $stmt->execute();
+    // $stmt = $conn->prepare("SELECT attr_name FROM `ref_attribute` WHERE id_ref = '$ref'");
+    // $stmt->execute();
+    // $check = $stmt->fetchAll(PDO::FETCH_NUM);
 ?>
 <body>
 
@@ -64,62 +68,56 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-          <div class="container-fluid">
-            <form class="form-horizontal">
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="source">Rule Name</label>
-              <div class="col-sm-10">
-              <select class="form-control" id="source" name="source" onchange="fetch_select(this.value)">
-                <option selected="selected"></option>
-                <?php
-                  while ($result = $stmt->fetch()) {
-                ?>    
-                <option><?php echo $result['nama_predikat']; ?></option>
-              <?php
-                }
-                $conn = null;
-              ?>
-              </select>
-              </div>
-            <br>
+            <div class="container-fluid">
+            <h4>Referensi EDB</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Predikat</th>
+                    <th>Basis Data</th>
+                    <th>Tabel Referensi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+                    while ($res = $data->fetch()) {
+                      $predikat = $res['nama_predikat'];
+                      echo '<tr>';
+                      echo '<td><a href="reference.php?id='.$predikat.'">'.$predikat.'</a></td>';
+                      echo '<td>'.$res['db_name'].'</td>';
+                      echo '<td>'.$res['table_name'].'</td>';
+                      echo '<td><a href="edit_reference.php?id='.$res['id_ref'].'">Edit</a> </td>';
+                      echo '<td><a href="delete_reference.php?id='.$res['id_ref'].'">Hapus</a></td>';
+                      echo '</tr>';
+                    }
+                  ?>
+                  <?php
+                    $conn = null;
+                  ?>
+                </tbody>
+              </table>
+              <a href="add_reference.php?">Tambah Referensi</a>
             </div>
-            </form>
-           <p id="rule"></p> 
-          </div>
         </div>
         <!-- /#page-content-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
-$("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
-</script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
-function fetch_select(val)
-{ 
-   $.ajax({
-     type: 'post',
-     url: 'fetch_rule.php',
-     data: {
-       get_option:val
-     },
-     success: function (response) {
-       document.getElementById("rule").innerHTML=response;
-     }
-     
-   });
-}
-</script>
 </body>
 
 </html>

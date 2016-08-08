@@ -12,8 +12,10 @@
   $('#add').click(function() {
     var last = $('.input:last').find('select').attr('id');
     var index = parseInt(last.substring(6));
-    //alert(last);
-    $.get("http://localhost/sandbox/add_form.php", {order : index}, function (data){
+    var cond = $('.inputs').find('input').attr('value');
+    var rule = $('.inputs').find('input').attr('id');
+    
+    $.get("http://localhost/sandbox/add_form.php", {order: index, condition: cond, name: rule}, function (data){
         $('.inputs').append(data);
         // $(data).fadeIn('slow').appendTo('.inputs');
     });
@@ -29,38 +31,5 @@
   i--;
   }
   });
-
-  // here's our click function for when the forms submitted
-  /*
-  $('.submit').click(function(){
-
-  var answers = [];
-  $.each($('.form-control'), function() {
-  answers.push($(this).val());
-  });
-
-  if(answers.length == 0) {
-  answers = "none";
-  }
-
-  alert(answers);
-
-
-/*
-  $.ajax({
-     type: 'post',
-     url: 'insert_param.php',
-     data: {
-       get_params:answers
-     },
-     success: function (response) { 
-        alert("success");
-     }
-     
-   });
-*/
-  /*return false; 
-
-  }); */
 
   });

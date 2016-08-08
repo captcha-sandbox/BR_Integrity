@@ -27,9 +27,10 @@
 </head>
 <?php 
   require ('sql_connect.inc');
+    //sql_connect('blog');
+    $stmt = $conn->prepare("SELECT id_statement, id_policy, definition, p.nama_predikat AS p, q.nama_predikat AS q FROM `br_statement` br INNER JOIN predikat p ON p.id_predikat = br.predikat INNER JOIN predikat q ON q.id_predikat = br.target");
+    $stmt->execute();
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
-  $stmt->execute();
 ?>
 <body>
 
@@ -64,62 +65,60 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-          <div class="container-fluid">
-            <form class="form-horizontal">
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="source">Rule Name</label>
-              <div class="col-sm-10">
-              <select class="form-control" id="source" name="source" onchange="fetch_select(this.value)">
-                <option selected="selected"></option>
-                <?php
-                  while ($result = $stmt->fetch()) {
-                ?>    
-                <option><?php echo $result['nama_predikat']; ?></option>
-              <?php
-                }
-                $conn = null;
-              ?>
-              </select>
-              </div>
-            <br>
+            <div class="container-fluid">
+            <h4>Predikat</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID Policy</th>
+                    <th>ID Statement</th>
+                    <th>Definisi</th>
+                    <th>Predikat</th>
+                    <th>Target</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+                    while($baris = $stmt->fetch()) {
+                  ?>
+                  <tr>
+                    <td><?php echo $baris['id_policy']; ?></td>
+                    <td><?php echo $baris['id_statement']; ?></td>
+                    <td><?php echo $baris['definition']; ?></td>
+                    <td><?php echo $baris['p']; ?></td>
+                    <td><?php echo $baris['q']; ?></td>
+                    <td><?php echo '<a href="edit_statement.php?id='.$baris['id_statement'].'">Edit</a>'; ?></td>
+                    <td><?php echo '<a href="delete_statement.php?id='.$baris['id_statement'].'">Hapus</a>'; ?></td>
+                  </tr>
+                  <?php
+                    }
+                    $conn = null;
+                  ?>
+                </tbody>
+              </table>
+
+              <a href="add_statement.php?">Tambah Business Rule</a>
             </div>
-            </form>
-           <p id="rule"></p> 
-          </div>
         </div>
         <!-- /#page-content-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
-$("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
-</script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
-function fetch_select(val)
-{ 
-   $.ajax({
-     type: 'post',
-     url: 'fetch_rule.php',
-     data: {
-       get_option:val
-     },
-     success: function (response) {
-       document.getElementById("rule").innerHTML=response;
-     }
-     
-   });
-}
-</script>
 </body>
 
 </html>

@@ -27,9 +27,10 @@
 </head>
 <?php 
   require ('sql_connect.inc');
+    //sql_connect('blog');
+    $stmt = $conn->prepare("SELECT * FROM `predikat` WHERE kelompok_predikat = 'EDB' OR kelompok_predikat = 'IDB'");
+    $stmt->execute();
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
-  $stmt->execute();
 ?>
 <body>
 
@@ -65,26 +66,41 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
           <div class="container-fluid">
-            <form class="form-horizontal">
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="source">Rule Name</label>
-              <div class="col-sm-10">
-              <select class="form-control" id="source" name="source" onchange="fetch_select(this.value)">
-                <option selected="selected"></option>
-                <?php
-                  while ($result = $stmt->fetch()) {
-                ?>    
-                <option><?php echo $result['nama_predikat']; ?></option>
-              <?php
-                }
-                $conn = null;
-              ?>
-              </select>
-              </div>
-            <br>
-            </div>
-            </form>
-           <p id="rule"></p> 
+            <form class="form-horizontal" role="form" method="post" action="<?php echo 'insert_predikat.php?' ?>">
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="predikat">Nama predikat</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="predikat" name="predikat">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="argumen">Jumlah argumen</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="argumen" name="argumen">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="tipe">Tipe predikat</label>
+      <div class="col-sm-10">
+        <select class="form-control" id="tipe" name="tipe">  
+          <option>EDB</option>
+          <option>IDB</option>
+        </select>
+      </div>
+    <br>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="description">Deskripsi</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="description" name="description">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
           </div>
         </div>
         <!-- /#page-content-wrapper -->
@@ -92,34 +108,20 @@
     </div>
     <!-- /#wrapper -->
 
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
-$("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
-</script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
-function fetch_select(val)
-{ 
-   $.ajax({
-     type: 'post',
-     url: 'fetch_rule.php',
-     data: {
-       get_option:val
-     },
-     success: function (response) {
-       document.getElementById("rule").innerHTML=response;
-     }
-     
-   });
-}
-</script>
 </body>
 
 </html>

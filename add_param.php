@@ -14,15 +14,15 @@
 
 <?php 
   require ('sql_connect.inc');
-  //$rulename = $_GET['rule'];
-  //sql_connect('blog');
-	$stmt = $conn->prepare("SELECT `name` FROM `table`");
+	$stmt = $conn->prepare("SELECT `jumlah_argumen`, `alias` FROM `table`, `business_rule`, `condition` WHERE condition.cond_id =  $id AND business_rule.rule_name = '$rule' AND (table.name = business_rule.source OR table.name = condition.source)");
   $stmt->execute();
   $record = array();
+  $alias = array();
   $i = 0;
 
   while ($result = $stmt->fetch()) {
     $record[$i] = $result['name'];
+    $alias[$i] = $result['alias'];
     $i++;
   }
 
@@ -46,16 +46,18 @@
             </div>
           <br>
         </div> -->
+        <input type="hidden" name="cond" id="<?php echo $rule; ?>" value="<?php echo $id; ?>"/>
         <div class="input">
         <div class="form-group">
           <label class="control-label col-sm-2" for="source">Source</label>
             <div class="col-sm-10">
               <select class="form-control" id="source1" name="dynamic[]" onchange="fetch_select(this.value, this.id);">
+                <option value="">Pilih Objek</option>
                 <?php
                   $i = 0;
                   while ($i<sizeof($record)) {
                 ?>    
-                <option><?php echo $record[$i]; ?></option>
+                <option value="<?php echo $alias[$i].'.'; ?>"><?php echo $record[$i]; ?></option>
                 <?php
                   $i++; 
                   }
@@ -68,16 +70,16 @@
         <div class="form-group">
           <label class="control-label col-sm-2" for="target">Target</label>
             <div class="col-sm-10">
-              <select class="form-control" id="target1" name="dynamic[]">  
+              <select class="form-control" id="target1" name="dynamic[]" required>  
               
               </select>
              </div>
           <br>
         </div>
         <div class="form-group">
-          <label class="control-label col-sm-2" for="conjunction"></label>
+          <label class="control-label col-sm-2" for="value"></label>
             <div class="col-sm-10">
-              <input type="text" name="dynamic[]" class="form-control"/>
+              <input type="text" name="dynamic[]" class="form-control" required/>
             </div>
           <br>
         </div>
@@ -85,11 +87,12 @@
           <label class="control-label col-sm-2" for="source">Source</label>
             <div class="col-sm-10">
               <select class="form-control" id="source2" name="dynamic[]" onchange="fetch_select(this.value, this.id);">
+                <option value="">Pilih Objek</option>
                 <?php
                   $i = 0;
                   while ($i<sizeof($record)) {
                 ?>    
-                <option><?php echo $record[$i]; ?></option>
+                <option value="<?php echo $alias[$i].'.'; ?>"><?php echo $record[$i]; ?></option>
                 <?php
                   $i++; 
                   }

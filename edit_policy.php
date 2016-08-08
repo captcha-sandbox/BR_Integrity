@@ -27,9 +27,14 @@
 </head>
 <?php 
   require ('sql_connect.inc');
+    
+    $id_policy = $_GET['id'];
+    $stmt = $conn->prepare("SELECT id_policy, deskripsi FROM policy WHERE id_policy = '$id_policy'");
+    $stmt->execute();
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
-  $stmt->execute();
+    $res = $stmt->fetch();
+    $id = $res['id_policy'];
+    $desc = $res['deskripsi'];
 ?>
 <body>
 
@@ -65,26 +70,26 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
           <div class="container-fluid">
-            <form class="form-horizontal">
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="source">Rule Name</label>
-              <div class="col-sm-10">
-              <select class="form-control" id="source" name="source" onchange="fetch_select(this.value)">
-                <option selected="selected"></option>
-                <?php
-                  while ($result = $stmt->fetch()) {
-                ?>    
-                <option><?php echo $result['nama_predikat']; ?></option>
-              <?php
-                }
-                $conn = null;
-              ?>
-              </select>
-              </div>
-            <br>
-            </div>
-            </form>
-           <p id="rule"></p> 
+            <form class="form-horizontal" role="form" method="post" action="<?php echo 'update_policy.php?' ?>">
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="predikat">ID Policy</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="policy" name="policy" value="<?php echo $id; ?>">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="description">Deskripsi</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="description" name="description" value="<?php echo $desc; ?>">
+    </div>
+  </div>
+  <input type="hidden" name="prev_id" value="<?php echo $id; ?>">
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Update</button>
+    </div>
+  </div>
+</form>
           </div>
         </div>
         <!-- /#page-content-wrapper -->
@@ -92,34 +97,20 @@
     </div>
     <!-- /#wrapper -->
 
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
-$("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
-</script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
-function fetch_select(val)
-{ 
-   $.ajax({
-     type: 'post',
-     url: 'fetch_rule.php',
-     data: {
-       get_option:val
-     },
-     success: function (response) {
-       document.getElementById("rule").innerHTML=response;
-     }
-     
-   });
-}
-</script>
 </body>
 
 </html>

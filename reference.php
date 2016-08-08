@@ -27,9 +27,19 @@
 </head>
 <?php 
   require ('sql_connect.inc');
+    //sql_connect('blog');
+    $id = $_GET['id'];
+    $data = $conn->prepare("SELECT id_ref, db_name, table_name FROM `reference` ref INNER JOIN predikat p ON ref.predikat = p.id_predikat WHERE nama_predikat = '$id'");
+    $data->execute();
+    $res = $data->fetch();
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
-  $stmt->execute();
+    $ref = $res['id_ref'];
+    $db_name = $res['db_name'];
+    $table = $res['table_name'];
+
+    $stmt = $conn->prepare("SELECT attr_name FROM `ref_attribute` WHERE id_ref = '$ref'");
+    $stmt->execute();
+    $check = $stmt->fetchAll(PDO::FETCH_NUM);
 ?>
 <body>
 
@@ -64,62 +74,61 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-          <div class="container-fluid">
-            <form class="form-horizontal">
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="source">Rule Name</label>
-              <div class="col-sm-10">
-              <select class="form-control" id="source" name="source" onchange="fetch_select(this.value)">
-                <option selected="selected"></option>
-                <?php
-                  while ($result = $stmt->fetch()) {
-                ?>    
-                <option><?php echo $result['nama_predikat']; ?></option>
-              <?php
-                }
-                $conn = null;
-              ?>
-              </select>
-              </div>
-            <br>
+            <div class="container-fluid">
+            <h4>Predikat: <?php echo $id; ?></h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Basis Data</th>
+                    <th>Nama Tabel</th>
+                    <?php
+                      $i=1;
+                      while ($i<=sizeof($check)) {
+                        echo '<th>Atribut '.$i.'</th>';
+                        $i++;    
+                      }
+                    ?>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><?php echo $db_name ?></td>
+                    <td><?php echo $table ?></td>
+                    <?php
+                      $i=0;
+                      while ($i<sizeof($check)) {
+                        echo '<td>'.$check[$i][0].'</td>';
+                        $i++;    
+                      }
+                    ?>
+                  </tr>
+                  <?php
+                    $conn = null;
+                  ?>
+                </tbody>
+              </table>
+
             </div>
-            </form>
-           <p id="rule"></p> 
-          </div>
         </div>
         <!-- /#page-content-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="assets/js/jquery.js"></script>
 
-<!-- Menu Toggle Script -->
-<script>
-$("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
-</script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
-function fetch_select(val)
-{ 
-   $.ajax({
-     type: 'post',
-     url: 'fetch_rule.php',
-     data: {
-       get_option:val
-     },
-     success: function (response) {
-       document.getElementById("rule").innerHTML=response;
-     }
-     
-   });
-}
-</script>
 </body>
 
 </html>
