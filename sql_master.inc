@@ -8,7 +8,7 @@
 }*/
 	$servername = "localhost";
 	$username = "root";
-	$password = "";
+	$password = "root";
 
 	try {
 		$conn = new PDO("mysql:host=$servername;dbname=information_schema", $username, $password);

@@ -28,18 +28,9 @@
 <?php 
   require ('sql_connect.inc');
     //sql_connect('blog');
-    $id = $_GET['id'];
-    $data = $conn->prepare("SELECT id_ref, db_name, table_name FROM `reference` ref INNER JOIN predikat p ON ref.predikat = p.id_predikat WHERE nama_predikat = '$id'");
-    $data->execute();
-    $res = $data->fetch();
-
-    $ref = $res['id_ref'];
-    $db_name = $res['db_name'];
-    $table = $res['table_name'];
-
-    $stmt = $conn->prepare("SELECT attr_name FROM `ref_attribute` WHERE id_ref = '$ref'");
+    $stmt = $conn->prepare("SELECT * FROM `schedule`");
     $stmt->execute();
-    $check = $stmt->fetchAll(PDO::FETCH_NUM);
+
 ?>
 <body>
 
@@ -68,6 +59,9 @@
                 <li>
                     <a href="allreference.php">Referensi</a>
                 </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
+                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -75,39 +69,38 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
-            <h4>Predikat: <?php echo $id; ?></h4>
+            <h4>Predikat</h4>
             <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>Basis Data</th>
-                    <th>Nama Tabel</th>
-                    <?php
-                      $i=1;
-                      while ($i<=sizeof($check)) {
-                        echo '<th>Atribut '.$i.'</th>';
-                        $i++;    
-                      }
-                    ?>
+                    <th>BR Statement</th>
+                    <th>Jadwal</th>
+                    <th>Instruksi</th>
+                    <th>Keterangan</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <?php 
+                    while($baris = $stmt->fetch()) {
+                  ?>
                   <tr>
-                    <td><?php echo $db_name ?></td>
-                    <td><?php echo $table ?></td>
+                    <td><?php echo $baris['id_statement']; ?></td>
+                    <td><?php echo $baris['jadwal']; ?></td>
+                    <td><?php echo $baris['instruksi']; ?></td>
+                    <td><?php echo $baris['keterangan']; ?></td>
                     <?php
-                      $i=0;
-                      while ($i<sizeof($check)) {
-                        echo '<td>'.$check[$i][0].'</td>';
-                        $i++;    
-                      }
+                      echo '<td><a href="edit_schedule.php?id='.$baris['id_jadwal'].'">Edit</a> </td>';
+                      echo '<td><a href="delete_schedule.php?id='.$baris['id_jadwal'].'">Hapus</a></td>';
                     ?>
                   </tr>
                   <?php
+                    }
                     $conn = null;
                   ?>
                 </tbody>
               </table>
 
+              <a href="add_schedule.php?">Tambah Jadwal</a>
             </div>
         </div>
         <!-- /#page-content-wrapper -->

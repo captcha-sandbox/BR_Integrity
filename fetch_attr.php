@@ -6,7 +6,7 @@
    {  
 
      $table = trim($_POST['get_option'], '.');
-     $stmt = $conn->prepare("SELECT column_name FROM columns WHERE table_name = '$table'");
+     $stmt = $conn->prepare("SELECT column_name FROM columns WHERE table_name = '$table' AND table_schema = 'akademik'");
      $stmt->execute();
 
      // $col = $stmt->fetchAll();

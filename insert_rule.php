@@ -1,6 +1,6 @@
 <?php
-	// require('sql_connect.inc');
-	include "backend/sql_connect.inc";
+	require('sql_connect.inc');
+	// include "backend/sql_connect.inc";
 	include "backend/rule.php";
 	include "backend/parser.php";
 	include "backend/builder.php";
@@ -13,25 +13,26 @@
 	$rulename = $_POST['source'];
 	$desc = $_POST['description'];
 
-	$p = new Parser();
+	$p = new Parser(); 
 	$queries = $p->identifyRule($desc);
-	// print_r($queries);
+
 	foreach ($queries as $query) {
 		echo $query."<br>"; 
 		$stmt = $conn->prepare($query);
 		$stmt->execute();
-	/*
-		if($stmt) {
+	
+	/*	if($stmt) {
 			?>
 				<script language="javascript">
 					alert("Data Berhasil Disimpan");
-					document.location="index.php";
+					document.location="rule.php";
 				</script>
 			<?php
 		}
 		else {
 			echo "Sorry, there was an error.";
-		}*/
+		}
+	*/
 	}
 	$conn = null;
 ?>

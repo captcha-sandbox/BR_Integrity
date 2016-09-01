@@ -1,6 +1,6 @@
 <?php
    
-  include "backend/sql_connect.inc";
+  include "sql_connect.inc";
   include "backend/rule.php";
   include "backend/rule_head.php";
   include "backend/rule_body.php";

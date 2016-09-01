@@ -3,14 +3,14 @@
 
 	$id = $_GET['id'];
 
-	$stmt = $conn->prepare("DELETE FROM `predikat` WHERE id_predikat = '$id'");
+	$stmt = $conn->prepare("DELETE FROM `schedule` WHERE id_jadwal = '$id'");
 	$stmt->execute();
 
 	if($stmt) {
 			?>
 				<script language="javascript">
 					alert("Data berhasil dihapus");
-					document.location="predikat.php";
+					document.location="schedule.php";
 				</script>
 			<?php
 			}
