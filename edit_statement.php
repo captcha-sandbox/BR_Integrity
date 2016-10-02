@@ -28,8 +28,9 @@
 <?php 
   require ('sql_connect.inc');
     //sql_connect('blog');
+    #get predicate and target
     $id = $_GET['id']; 
-    $stmt = $conn->prepare("SELECT id_statement, id_policy, definition, p.nama_predikat AS a, q.nama_predikat AS b FROM br_statement br, predikat p, predikat q WHERE id_statement = '$id' AND br.predikat = p.id_predikat AND br.target = q.id_predikat");
+    $stmt = $conn->prepare("SELECT id_statement, id_policy, definition, tipe, p.nama_predikat AS a, q.nama_predikat AS b FROM br_statement br, predikat p, predikat q WHERE id_statement = '$id' AND br.predikat = p.id_predikat AND br.target = q.id_predikat");
     $stmt->execute();
 
     $res = $stmt->fetch();
@@ -38,17 +39,18 @@
     $def = $res['definition'];
     $predikat = $res['a'];
     $target = $res['b'];
+    $type = $res['tipe'];
 
     $stmt = $conn->prepare("SELECT id_policy FROM `policy`");
     $stmt->execute();
 
     $ids = array(); $i=0;
-    while ($id = $stmt->fetch()) {
-      $ids[$i] = $id['id_policy'];
+    while ($res = $stmt->fetch()) {
+      $ids[$i] = $res['id_policy'];
       $i++;
     }
 
-    $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
+    $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB' ORDER BY nama_predikat ASC");
     $stmt->execute();
 
     $predicates = array(); $i=0;
@@ -56,12 +58,13 @@
       $predicates[$i] = $res['nama_predikat'];
       $i++;
     }
-
+    
 ?>
 <body>
 
     <div id="wrapper">
 
+        <!-- Sidebar -->
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -84,6 +87,9 @@
                 </li>
                 <li>
                     <a href="allreference.php">Referensi</a>
+                </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
                 </li>
             </ul>
         </div>
@@ -159,6 +165,24 @@
             $i++;
           }  
         ?>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="argumen">Komplemen</label>
+    <div class="col-sm-10">
+      <select class="form-control" id="type" name="type">
+        <?php
+          if($type == 'Optional') {
+            echo '<option selected="selected">Optional</option>';
+            echo '<option>Mandatory</option>';
+          }
+          else {
+            echo '<option>Optional</option>';
+            echo '<option selected="selected">Mandatory</option>';
+          }  
+        ?>
+          
       </select>
     </div>
   </div>

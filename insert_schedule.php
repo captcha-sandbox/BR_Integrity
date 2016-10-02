@@ -22,12 +22,12 @@
 
 	#register cron job to server
 	$schedule = new Scheduler();
-	$schedule->createSchedule($br, $predicate, $time);
+	$param = $schedule->createSchedule($br, $predicate, $time);
 
 	// #save setting into database
-	// $stmt = $conn->prepare("INSERT INTO `schedule`(id_statement, jadwal, instruksi, keterangan) VALUES ('$br', '$time', '$command', '$desc')");
-	// // var_dump($stmt);
-	// $stmt->execute();
+	$stmt = $conn->prepare("INSERT INTO `schedule`(jadwal, instruksi, keterangan, `statement`) VALUES ('$time', '$param', '$desc', '$br')");
+	// var_dump($stmt);
+	$stmt->execute();
 
 	if($stmt) {
 			?>

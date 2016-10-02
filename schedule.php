@@ -28,7 +28,7 @@
 <?php 
   require ('sql_connect.inc');
     //sql_connect('blog');
-    $stmt = $conn->prepare("SELECT * FROM `schedule`");
+    $stmt = $conn->prepare("SELECT br.definition, s.id_jadwal, s.jadwal, s.keterangan FROM `schedule` s INNER JOIN br_statement br ON s.statement = br.id_statement ");
     $stmt->execute();
 
 ?>
@@ -75,7 +75,6 @@
                   <tr>
                     <th>BR Statement</th>
                     <th>Jadwal</th>
-                    <th>Instruksi</th>
                     <th>Keterangan</th>
                   </tr>
                 </thead>
@@ -84,12 +83,10 @@
                     while($baris = $stmt->fetch()) {
                   ?>
                   <tr>
-                    <td><?php echo $baris['id_statement']; ?></td>
+                    <td><?php echo $baris['definition']; ?></td>
                     <td><?php echo $baris['jadwal']; ?></td>
-                    <td><?php echo $baris['instruksi']; ?></td>
                     <td><?php echo $baris['keterangan']; ?></td>
                     <?php
-                      echo '<td><a href="edit_schedule.php?id='.$baris['id_jadwal'].'">Edit</a> </td>';
                       echo '<td><a href="delete_schedule.php?id='.$baris['id_jadwal'].'">Hapus</a></td>';
                     ?>
                   </tr>

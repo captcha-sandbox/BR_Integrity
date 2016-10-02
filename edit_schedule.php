@@ -28,7 +28,7 @@
 <?php 
   require ('sql_connect.inc');
     //sql_connect('blog');
-    $stmt = $conn->prepare("SELECT `name` FROM time_unit ORDER BY `order` ASC");
+    $stmt = $conn->prepare("SELECT `name` FROM time_unit ORDER BY `name` ASC");
     $stmt->execute();
 
     $units = array(); $i=0;
@@ -77,6 +77,9 @@
                 </li>
                 <li>
                     <a href="allreference.php">Referensi</a>
+                </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
                 </li>
             </ul>
         </div>

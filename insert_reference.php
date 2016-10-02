@@ -13,7 +13,7 @@
 	$res = $stmt->fetch();
 	$id_predikat = $res[0];
 
-	$stmt = $conn->prepare("INSERT INTO `edb`(id_predikat, reference) VALUES ($id_predikat, '$id_ref')");
+	$stmt = $conn->prepare("INSERT INTO `edb`(id_predikat, `reference`) VALUES ($id_predikat, '$id_ref')");
 	print_r($stmt);
 	$stmt->execute();
 

@@ -37,7 +37,7 @@
       $i++;
     }
 
-    $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
+    $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB' ORDER BY nama_predikat ASC");
     $stmt->execute();
 
     $predicates = array(); $i=0;
@@ -73,6 +73,9 @@
                 </li>
                 <li>
                     <a href="allreference.php">Referensi</a>
+                </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
                 </li>
             </ul>
         </div>
@@ -133,6 +136,15 @@
             $i++;
           }  
         ?>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="argumen">Tipe</label>
+    <div class="col-sm-10">
+      <select class="form-control" id="type" name="type">
+        <option selected="selected">Optional</option>
+        <option>Mandatory</option>
       </select>
     </div>
   </div>

@@ -28,7 +28,7 @@
 <?php 
   require ('sql_connect.inc');
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB'");
+  $stmt = $conn->prepare("SELECT nama_predikat FROM `predikat` WHERE kelompok_predikat = 'IDB' ORDER BY nama_predikat ASC");
   $stmt->execute();
 ?>
 <body>
@@ -58,6 +58,9 @@
                 <li>
                     <a href="allreference.php">Referensi</a>
                 </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
+                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -86,6 +89,7 @@
             </form>
            <p id="rule"></p> 
           </div>
+          <a href="add_rule.php?">Tambah Aturan</a>
         </div>
         <!-- /#page-content-wrapper -->
 

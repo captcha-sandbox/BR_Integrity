@@ -63,6 +63,9 @@
                 <li>
                     <a href="allreference.php">Referensi</a>
                 </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
+                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->

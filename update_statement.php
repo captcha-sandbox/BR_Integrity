@@ -5,7 +5,8 @@
 	$statement = $_POST['statement'];
 	$desc = $_POST['definition'];
 	$predikat = $_POST['predicate'];
-	$target =  $_POST['target']; 
+	$target =  $_POST['target'];
+	$type = $_POST['type']; 
 	$id = $_POST['prev_id'];
 
 	$stmt = $conn->prepare("SELECT id_predikat FROM predikat WHERE nama_predikat = '$predikat'");
@@ -18,7 +19,13 @@
 	$res = $stmt->fetch();
 	$tgt = $res[0];
 
-	$stmt = $conn->prepare("UPDATE br_statement SET id_statement = '$statement', id_policy ='$policy', definition = '$desc', predikat = $pred, target = $tgt WHERE id_statement = '$id'");
+	$stmt = $conn->prepare("SELECT id_predikat FROM predikat WHERE nama_predikat = '$komplemen'");
+	$stmt->execute();
+	$res = $stmt->fetch();
+	$comp = $res[0];
+
+
+	$stmt = $conn->prepare("UPDATE br_statement SET id_statement = '$statement', id_policy ='$policy', definition = '$desc', predikat = $pred, target = $tgt, tipe = '$type' WHERE id_statement = '$id'");
 	$stmt->execute();
 
 	if($stmt) {

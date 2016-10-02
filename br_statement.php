@@ -28,7 +28,7 @@
 <?php 
   require ('sql_connect.inc');
     //sql_connect('blog');
-    $stmt = $conn->prepare("SELECT id_statement, id_policy, definition, p.nama_predikat AS p, q.nama_predikat AS q FROM `br_statement` br INNER JOIN predikat p ON p.id_predikat = br.predikat INNER JOIN predikat q ON q.id_predikat = br.target");
+    $stmt = $conn->prepare("SELECT id_statement, id_policy, definition, tipe, p.nama_predikat AS p, q.nama_predikat AS q FROM `br_statement` br INNER JOIN predikat p ON p.id_predikat = br.predikat INNER JOIN predikat q ON q.id_predikat = br.target");
     $stmt->execute();
 
 ?>
@@ -37,6 +37,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
+        <<!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
@@ -59,6 +60,9 @@
                 <li>
                     <a href="allreference.php">Referensi</a>
                 </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
+                </li>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -75,10 +79,12 @@
                     <th>Definisi</th>
                     <th>Predikat</th>
                     <th>Target</th>
+                    <th>Tipe</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
+                  <?php
+                    $idx = 0; 
                     while($baris = $stmt->fetch()) {
                   ?>
                   <tr>
@@ -87,10 +93,12 @@
                     <td><?php echo $baris['definition']; ?></td>
                     <td><?php echo $baris['p']; ?></td>
                     <td><?php echo $baris['q']; ?></td>
+                    <td><?php echo $baris['tipe']; ?></td>
                     <td><?php echo '<a href="edit_statement.php?id='.$baris['id_statement'].'">Edit</a>'; ?></td>
                     <td><?php echo '<a href="delete_statement.php?id='.$baris['id_statement'].'">Hapus</a>'; ?></td>
                   </tr>
                   <?php
+                    $idx++;
                     }
                     $conn = null;
                   ?>

@@ -16,7 +16,7 @@
 <?php 
   require ('sql_connect.inc');
 
-  $stmt = $conn->prepare("SELECT nama_predikat FROM predikat WHERE kelompok_predikat = 'EDB'");
+  $stmt = $conn->prepare("SELECT nama_predikat FROM predikat WHERE kelompok_predikat = 'EDB' ORDER BY nama_predikat ASC ");
   $stmt->execute();
 
   $edb = array(); $i=0;
@@ -52,6 +52,9 @@
                 </li>
                 <li>
                     <a href="allreference.php">Referensi</a>
+                </li>
+                <li>
+                    <a href="schedule.php">Penjadwalan</a>
                 </li>
             </ul>
         </div>

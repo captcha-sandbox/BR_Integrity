@@ -214,12 +214,6 @@
       </div>
     <br>
   </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="description">Instruksi</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="instruction" name="instruction" required>
-    </div>
-  </div>
    <div class="form-group">
     <label class="control-label col-sm-2" for="keterangan">Keterangan</label>
     <div class="col-sm-10">
